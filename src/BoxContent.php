@@ -1,0 +1,246 @@
+<?php
+
+namespace Maengkom\Box;
+
+trait BoxContent {
+
+	/*
+	|
+	| ================================= Folder API Methods ==================================
+	| Check documentation here https://box-content.readme.io/reference#folder-object
+	|
+	*/
+
+	/* Get the details of the mentioned folder */
+	public function getFolderInfo($folder_id, $json = false) {
+		$url = $this->api_url . "/folders/$folder_id";
+		return $this->get($url, $json);
+	}
+
+	/* Get the list of items in the mentioned folder */
+	public function getFolderItems($folder_id, $json = false) {
+		$url = $this->api_url . "/folders/$folder_id/items";
+		return $this->get($url, $json);
+	}
+
+	/* Create folder */
+	public function createFolder($name, $parent_id, $json = false) {
+		$url = $this->api_url . "/folders";
+		$data = "-d '{\"name\":\"$name\", \"parent\": {\"id\": \"$parent_id\"}}'";
+		return $this->post($url, $json, $data);
+	}
+
+	/* Update folder */
+	public function updateFolder($folder_id, $folder_name, $json = false) {
+		$url = $this->api_url . "/folders/$folder_id";
+		$data = "-d '{\"name\":\"$folder_name\"}'";
+		return $this->put($url, $json, $data);
+	}
+
+	/* Delete folder */
+	public function deleteFolder($folder_id) {
+		$url = $this->api_url . "/folders/$folder_id";
+		return $this->delete($url);
+	}
+
+	/* Copy folder */
+	public function copyFolder($folder_id, $folder_dest_id, $json = false) {
+		$url = $this->api_url . "/folders/$folder_id/copy";
+		$data = "-d '{\"parent\": {\"id\": \"$folder_dest_id\"}}'";
+		return $this->post($url, $json, $data);
+	}
+
+	/* Create shared link folder */
+	public function createSharedLinkFolder($folder_id, $json = false) {
+		$url = $this->api_url . "/folders/$folder_id";
+		$data = "-d '{\"shared_link\": {\"access\": \"open\"}}'";
+		return $this->put($url, $json, $data);
+	}
+
+	/* Get folder collaborations */
+	public function getFolderCollaborations($folder_id, $json = false) {
+		$url = $this->api_url . "/folders/$folder_id/collaborations";
+		return $this->get($url, $json);
+	}
+
+	/* Get trashed items */
+	public function getTrashedItems($limit = 10, $offset = 0, $json = false) {
+		$url = $this->api_url . "/folders/trash/items?limit=$limit&offset=$offset";
+		return $this->get($url, $json);
+	}
+
+	/* Get trashed folder */
+	public function getTrashedFolder($folder_id, $json = false) {
+		$url = $this->api_url . "/folders/$folder_id/trash";
+		return $this->get($url, $json);
+	}
+
+	/* Delete folder permanently */
+	public function deleteFolderPermanent($folder_id) {
+		$url = $this->api_url . "/folders/$folder_id/trash";
+		return $this->delete($url);
+	}
+
+	/* Restore a folder */
+	public function restoreFolder($folder_id, $newname = '', $json = false) {
+		$url = $this->api_url . "/folders/$folder_id";
+		if (empty($newname)) { 
+			$data = "-d '{\"name\": \"$newname\"}'"; 
+		}
+		return $this->post($url, $json, $data);
+	}
+
+
+	/*
+	|
+	| ================================= File API Methods ==================================
+	| Check Box documentation here https://box-content.readme.io/reference#files
+	|  
+	*/
+	
+	/* Get the details of the mentioned file */
+	public function getFileInfo($file_id, $json = false) {
+		$url = $this->api_url . "/files/$file_id";
+		return $this->get($url, $json);
+	}
+
+	/* Update file */
+	public function updateFileInfo($file_id, $file_name, $json = false) {
+		$url = $this->api_url . "/files/$file_id";
+		$data = "-d '{\"name\":\"$file_name\"}'";
+		return $this->put($url, $json, $data);
+	}
+
+	/* Toggle lock or unlock a file */
+	public function toggleLock($file_id, $lockType = null, $expire = null, $canDownload = false) {
+		$url = $this->api_url . "/files/$file_id";
+		$data = "-d '{\"lock\":{\"type\": \"$lockType\", \"expires_at\": \"$expire\", \"is_download_prevented\": $canDownload}'";
+		return $this->put($url, $json, $data);
+	}
+
+	/* Download file */
+	public function downloadFile($file_id) {
+		$url = $this->api_url . "/files/$file_id/content";
+		return $this->get($url);
+	}
+
+	/* Upload a file */
+	public function uploadFile($filename ,$parent_id, $name = null, $json = false) {
+		$url = $this->upload_url . '/files/content';
+
+		if ( ! isset($name)) {
+			$name = basename($filename);
+		}
+
+		$attributes = "-F attributes='{\"name\":\"$name\", \"parent\":{\"id\":\"$parent_id\"}}'";
+		$attributes = $attributes . " -F file=@$filename";
+		return $this->post($url, $json, $attributes);
+	}
+
+	/* Delete a file */
+	public function deleteFile($file_id) {
+		$url = $this->api_url . "/files/$file_id";
+		return $this->delete($url);
+	}
+
+	/* Update a file - new upload to update content of file */
+	public function updateFile($filename, $file_id, $json = false) {
+		$url = $this->upload_url . '/files/$file_id/content';
+		$attributes = $attributes . " -F file=@$filename";
+		return $this->post($url, $json, $attributes);
+	}
+
+	/* Copy a file */
+	public function copyFile($file_id, $folder_dest_id, $json = false) {
+		$url = $this->api_url . "/files/$file_id/copy";
+		$data = "-d '{\"parent\": {\"id\": \"$folder_dest_id\"}}'";
+		return $this->post($url, $json, $data);
+	}
+
+	/* Get thumbnail of a file */
+	public function getThumbnail($file_id) {
+		$url = $this->api_url . "/files/$file_id/thumbnail.png?min_height=256&min_width=256";
+		return $this->get($url);		
+	}
+
+	/* Get embed link of a file */
+	public function getEmbedLink($file_id, $json = false) {
+		$url = $this->api_url . "/files/$file_id?fields=expiring_embed_link";
+		return $this->get($url, $json);		
+	}
+
+	/* Share a file */
+	public function createShareLink($file_id, $access, $json = false) {
+		$url = $this->api_url . "/files/$file_id";
+		$data = "-d '{\"shared_link\": {\"access\": \"$access\"}}'";
+		return $this->put($url, $json, $data);
+	}
+
+	/* Get trashed file */
+	public function getTrashedFile($file_id, $json = false) {
+		$url = $this->api_url . "/files/$file_id/trash";
+		return $this->get($url, $json);
+	}
+
+	/* Delete file permanently */
+	public function deleteFilePermanent($file_id) {
+		$url = $this->api_url . "/files/$file_id/trash";
+		return $this->delete($url);
+	}
+
+	/* Restore a file */
+	public function restoreItem($file_id, $newname = '', $json = false) {
+		$url = $this->api_url . "/files/$file_id";
+		if (empty($newname)) { 
+			$data = "-d '{\"name\": \"$newname\"}'"; 
+		}
+		return $this->post($url, $json, $data);
+	}
+
+	/* View comments */
+	public function viewComments($file_id, $json = false) {
+		$url = $this->api_url . "/files/$file_id/comments";
+		return $this->get($url, $json);
+	}
+
+	/* Get file tasks */
+	public function getFileTasks($file_id, $json = false) {
+		$url = $this->api_url . "/files/$file_id/tasks";
+		return $this->get($url, $json);
+	}
+
+	// ================================= Helper Methods ==================================
+
+	private function get($url, $json = false, $data = '') {
+		$data = shell_exec("curl $url $this->auth_header $data");
+		if ($json) {
+			return $data;
+		} else {
+			return json_decode($data, true);
+		}
+	} 
+
+	private function post($url, $json = false, $data = '') {
+		$data = shell_exec("curl $url $this->auth_header $data -X POST");
+		if ($json) {
+			return $data;
+		} else {
+			return json_decode($data, true);
+		}
+	} 
+
+	private function put($url, $json = false, $data = '') {
+		$data = shell_exec("curl $url $this->auth_header $data -X PUT");
+		if ($json) {
+			return $data;
+		} else {
+			return json_decode($data, true);
+		}
+	} 
+
+	private function delete($url) {
+		$data = shell_exec("curl $url $this->auth_header -X DELETE");
+		return $data;
+	} 
+
+}
