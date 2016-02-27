@@ -19,8 +19,8 @@ class BoxAppUser
      * @var array
      */
     public $config = array(
-        'client_id' 		=> '',
-        'client_secret'		=> '',
+        'au_client_id' 		=> '',
+        'au_client_secret'	=> '',
         'redirect_uri'		=> '',
         'enterprise_id'		=> '',
         'app_user_name'		=> '',
@@ -82,7 +82,7 @@ class BoxAppUser
 	
 		$assertion = (new Builder())
 			->setHeader('kid', $this->config['kid_value'])
-			->setIssuer($this->config['client_id'])
+			->setIssuer($this->config['au_client_id'])
 			->setSubject($id)
 			->set('box_sub_type', $type)
 			->setAudience($this->audience_url)
@@ -94,8 +94,8 @@ class BoxAppUser
 
 		$attributes = "-d 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer";
 		
-		$cid = $this->config['client_id'];
-		$csc = $this->config['client_secret'];
+		$cid = $this->config['au_client_id'];
+		$csc = $this->config['au_client_secret'];
 
 		$result = shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
 
