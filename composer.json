@@ -1,0 +1,27 @@
+{
+    "name": "maengkom/boxapi",
+    "description": "Latest Box API for Standard User & App User",
+    "keywords": ["box", "boxapi", "laravel"],
+    "license": "MIT",
+    "type": "library",
+    "homepage": "http://maengkom.com",
+    "require": {
+        "php": ">=5.4",
+        "lcobucci/jwt": "^3.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    },
+    "authors": [
+        {
+            "name": "Benyamin Maengkom",
+            "email": "bento@maengkom.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Maengkom\\Box\\": "src"
+        }
+    },
+    "minimum-stability": "dev"
+}
