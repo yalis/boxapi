@@ -110,7 +110,7 @@ For Lumen just mention the name of private key file, absolute path already set i
 
 	'private_key_file'  => base_path() . "/" . $_ENV['BOX_PRIVATE_KEY_FILE'] 
 
-### PHP Project
+#### PHP Project
 Set configuration values in array and passing the config variables in instance creation, for example :
 
 ```
