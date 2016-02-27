@@ -39,8 +39,7 @@ class BoxAPIServiceProviderLaravel5 extends ServiceProvider
 
         // create standard user
         $app['boxstandarduser'] = $app->share(function ($app) {
-            // return new BoxStandardUser( $app['config']->get('boxapi') );
-            return new BoxStandardUser();
+            return new BoxStandardUser( $app['config']->get('boxapi') );
         });
 
         $app->alias('boxstandarduser', 'Maengkom\Box\BoxStandardUser');

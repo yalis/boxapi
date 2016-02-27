@@ -12,8 +12,10 @@ return [
     |
     */
 
-    'client_id'     	=> '',
-    'client_secret' 	=> '',
+    'au_client_id'     	=> '',
+    'au_client_secret' 	=> '',
+    'su_client_id'         => '',
+    'su_client_secret'     => '',
     'redirect_uri'  	=> '',
 
     /*
