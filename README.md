@@ -63,11 +63,76 @@ and these classes are required
 
 ## Configuration
 
-There are some configuration key to set in boxapi.php in config folder.
+#### General
 
 Please read the comment and open url box documentation to get the values for those keys.
 
 For App User type, assumed you only need one user for your webserver communicate with your box account. Just set app\_user\_name and package will check if not exist, it will created for you based on name, if exist as app user on your box app, it will use user id to used in application.
+
+#### App User Private Key File
+When using App User class ``BoxAppUser`, you must create 2 files : private_key.pem and public_key.pem. Put private key file in the root of application, for Laravel project this should be fine because outside public folder.
+
+
+#### Laravel 5
+There are some configuration key to set in folder 
+
+``config/boxapi.php`` and don't forget if you set private key file in root folder. Set this 
+
+	'private_key_file'  => base_path() . '/private_key.pem'
+
+#### Laravel 4
+
+Configuration file will be put on folder 
+
+``app\config\packages\maengkom\boxapi\config.php``
+
+also like Laravel 5, you may set private key file in the root project folder
+
+	'private_key_file'  => base_path() . '/private_key.pem'
+
+#### Lumen
+Configuration integrated in .env file, use the key below and find the values in you box app. Follow guideline in http://developer.box.com 
+
+```
+BOX_AU_CLIENT_ID	 		=
+BOX_AU_CLIENT_SECRET   		=
+BOX_REDIRECT_URI			=
+BOX_ENTERPRISE_ID			=
+BOX_APP_USER_NAME			=
+BOX_APP_USER_ID				=
+BOX_EXPIRATION				= 60
+BOX_KID_VALUE				=
+BOX_PRIVATE_KEY_FILE		= private_key.pem
+BOX_PASSPHRASE				= 1234
+```
+
+For Lumen just mention the name of private key file, absolute path already set in ServiceProvider
+
+	'private_key_file'  => base_path() . "/" . $_ENV['BOX_PRIVATE_KEY_FILE'] 
+
+### PHP Project
+Set configuration values in array and passing the config variables in instance creation, for example :
+
+```
+$config = array(
+        'client_id' 		=> '',
+        'client_secret'		=> '',
+        'redirect_uri'		=> '',
+        'enterprise_id'		=> '',
+        'app_user_name'		=> '',
+        'app_user_id'		=> '',
+        'kid_value'			=> '',
+        'passphrase'		=> '',
+        'expiration'		=> 60,
+        'private_key_file'	=> 'private_key.pem',
+        
+$box = new BoxAppUser($config); 		// For App User or
+$box = new BoxStandardUser($config) 	// For Standard User
+```
+
+Set your private key file out of folder that accessible for internet user.
+
+
 
 ## API List
 
@@ -94,5 +159,7 @@ If you want to get folder information in root, call this methods :
 
 	BoxAU::getFolderInfo('0', true); // Return root folder information using App User in Json format
 	BoxSU::getFolderInfo('0', true); // Return root folder information using Standard User in Json format
+	
+
 
 	
