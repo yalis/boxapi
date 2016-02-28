@@ -136,23 +136,39 @@ Set your private key file out of folder that accessible for internet user.
 
 ## API List
 
-Below are the API method you can used. All methods are following Box documentation.
+Below are the API methods you can used. All methods are following Box documentation.
 
 
-Name                  | Method                 | Verb   | Url (https)                                      
---------------------- | ---------------------- | ------ | --------------------------------------------------
-Get Folder’s Info     | getFolderInfo()        | Get    | api.box.com/2.0/folders/{FOLDER_ID} 
-Get Folder's Item     | getFolderItems()       | Get    | api.box.com/2.0/folders/{FOLDER_ID}/items
-Create Folder         | createFolder()         | Post   | api.box.com/2.0/folders
-Update Folder         | updateFolder()         | Put    | api.box.com/2.0/folders/{FOLDER_ID}
-Delete Folder         | deleteFolder()         | Delete | api.box.com/2.0/folders/{FOLDER_ID}
-Copy Folder           | copyFolder()           | Post   | api.box.com/2.0/folders/{FOLDER_ID}/copy
-Create Shared Link	  | createSharedLink()     | Put    | api.box.com/2.0/folders/{FOLDER_ID}
-Folder Collaborations | folderCollaborations() | Get    | api.box.com/2.0/folders/{FOLDER_ID}/collaborations
-Get Trashed Items     | getTrashedItems()      | Get    | api.box.com/2.0/folders/trash/items
-Get Trashed Folder    | getTrashedFolder()     | Get    | https://api.box.com/2.0/folders/{FOLDER_ID}/trash
-Permanently Delete    | permanentDelete()      | Delete | https://api.box.com/2.0/folders/{FOLDER_ID}/trash
-Restore Folder        | restoreFolder()        | Get    | https://api.box.com/2.0	
+Object     | Method                               | Verb   | Official Manual                                   
+-------- | -------------------------------------- | ------ | ---------------
+Folder   | getFolderInfo($id)                     | Get    | [Get Folder’s Info](https://box-content.readme.io/reference#folder-object)
+Folder   | getFolderItems($id)                    | Get    | [Get Folder's Items](https://box-content.readme.io/reference#get-a-folders-items)
+Folder   | createFolder($name, $parent_id)        | Post   | [Create Folder](https://box-content.readme.io/reference#create-a-new-folder)
+Folder   | updateFolder($id, $name)               | Put    | [Update Folder](https://box-content.readme.io/reference#update-information-about-a-folder)
+Folder   | deleteFolder($id)                      | Delete | [Delete Folder](https://box-content.readme.io/reference#delete-a-folder)
+Folder   | copyFolder($id, $dest)                 | Post   | [Copy Folder](https://box-content.readme.io/reference#copy-a-folder)
+Folder   | createSharedLink($id)                  | Put    | [Create Shared Link](https://box-content.readme.io/reference#create-a-shared-link-for-a-folder)
+Folder   | folderCollaborations($id)              | Get    | [Folder Collaborations](https://box-content.readme.io/reference#view-a-folders-collaborations)
+Folder   | getTrashedItems($limit, $offeset)      | Get    | [Get Trashed Items](https://box-content.readme.io/reference#get-the-items-in-the-trash)
+Folder   | getTrashedFolder($id)                  | Get    | [Get Trashed Folder](https://box-content.readme.io/reference#get-a-trashed-folder)
+Folder   | permanentDelete($id)                   | Delete | [Permanently Delete](https://box-content.readme.io/reference#permanently-delete-a-trashed-folder)
+Folder   | restoreFolder($id, $newName)           | Get    | [Restore Folder](https://box-content.readme.io/reference#restore-a-trashed-folder)
+File     | getFileInfo($id)                       | Get    | [Get File's Info](https://box-content.readme.io/reference#files)
+File     | updateFileInfo($id, $name)             | Put    | [Update File's Info](https://box-content.readme.io/reference#update-a-files-information)
+File     | toggleLock($id, $type, $expire, $down) | Put    | [Lock and Unlock](https://box-content.readme.io/reference#lock-and-unlock)
+File     | downloadFile($id)                      | Get    | [Download File](https://box-content.readme.io/reference#download-a-file)
+File     | uploadFile($file, $parent, $name)      | Post   | [Upload File](https://box-content.readme.io/reference#upload-a-file)
+File     | deleteFile($id)                        | Delete | [Delete File](https://box-content.readme.io/reference#delete-a-file)
+File     | updateFile($name, $id)                 | Post   | [Update File](https://box-content.readme.io/reference#upload-a-new-version-of-a-file)
+File     | copyFile($id, $dest)                   | Post   | [Copy File](https://box-content.readme.io/reference#copy-a-file)
+File     | getThumbnail($id)                      | Get    | [Get Thumbnail](https://box-content.readme.io/reference#get-a-thumbnail-for-a-file)
+File     | getEmbedLink($id)                      | Get    | [Get Embed Link](https://box-content.readme.io/reference#get-embed-link)
+File     | createSharedLink($id, $access)         | Put    | [Create Shared Link](https://box-content.readme.io/reference#create-a-shared-link-for-a-file)
+File     | getTrashedFile($id)                    | Get    | [Get Trashed File](https://box-content.readme.io/reference#get-a-trashed-file)
+File     | deleteFilePermanent($id)               | Delete | [Permanently Delete](https://box-content.readme.io/reference#permanently-delete-a-trashed-file)
+File     | restoreItem($id, $newName)             | Post   | [Restore File Item](https://box-content.readme.io/reference#restore-a-trashed-item)
+File     | viewComments($id)                      | Get    | [View Comments](https://box-content.readme.io/reference#view-the-comments-on-a-file)
+File     | getFileTasks($id)                      | Get    | [Get File's Tasks](https://box-content.readme.io/reference#get-the-tasks-for-a-file) 	
 
 ## Example
 If you want to get folder information in root, call this methods :
