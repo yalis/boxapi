@@ -28,11 +28,11 @@ BoxAU is used for App User for Enterprise box account. BoxSU is used for normal 
 
 After this don't forget to run this command below, to copy config file into config folder in Laravel 5 project
 
-	php artisan publish vendor:publish --provider="Maengkom/Box/BoxAPIServiceProvider"
+	php artisan vendor:publish --tag="boxapi" // or
 	
 for Laravel 4, run this command in terminal
 
-	php artisan publish config:publish maengkom/boxapi
+	php artisan config:publish maengkom/boxapi
 
 
 ## Installation on Lumen
