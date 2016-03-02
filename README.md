@@ -28,7 +28,7 @@ BoxAU is used for App User for Enterprise box account. BoxSU is used for normal 
 
 After this don't forget to run this command below, to copy config file into config folder in Laravel 5 project
 
-	php artisan vendor:publish --tag="boxapi" // or
+	php artisan vendor:publish --tag="boxapi" 
 	
 for Laravel 4, run this command in terminal
 
