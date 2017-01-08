@@ -103,7 +103,7 @@ class BoxStandardUser {
 	public function readToken($type = 'file', $json = false) {
 		if($type == 'file' && file_exists(__DIR__.'/token.box')){
 			$fp = fopen(__DIR__.'/token.box', 'r');
-			$content = fread($fp, filesize('token.box'));
+			$content = fread($fp, filesize(__DIR__.'token.box'));
 			fclose($fp);
 		} else {
 			return false;
