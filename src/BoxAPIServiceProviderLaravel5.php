@@ -31,14 +31,14 @@ class BoxAPIServiceProviderLaravel5 extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config/config.php', 'boxapi');
 
         // create appuser
-        $app['boxappuser'] = $app->share(function ($app) {
+        $app->singleton('boxappuser', function ($app) {
             return new BoxAppUser( $app['config']->get('boxapi') );
         });
 
         $app->alias('boxappuser', 'Maengkom\Box\BoxAppUser');
 
         // create standard user
-        $app['boxstandarduser'] = $app->share(function ($app) {
+        $app->singleton('boxstandarduser', function ($app) {
             return new BoxStandardUser( $app['config']->get('boxapi') );
         });
 
