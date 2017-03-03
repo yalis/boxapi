@@ -120,8 +120,23 @@ trait BoxContent {
 
 	/* Download file */
 	public function downloadFile($file_id) {
-		$url = $this->api_url . "/files/$file_id/content";
-		return $this->get($url);
+
+		//set the headers
+		$headers = $this->auth_header_php;
+
+		$curl = curl_init();
+
+		//set the options
+		curl_setopt($curl, CURLOPT_URL, $this->api_url . "/files/$file_id/content");
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array($headers));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); //returns to a variable instead of straight to page
+		curl_setopt($curl, CURLOPT_HEADER, true); //returns headers as part of output
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); //I needed this for it to work
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); //I needed this for it to work
+
+		$headers = curl_exec($curl); //because the returned page is blank, this will include headers only
+
+		return curl_getinfo($curl, CURLINFO_REDIRECT_URL);
 	}
 
 	/* Upload a file */

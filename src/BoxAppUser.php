@@ -100,7 +100,10 @@ class BoxAppUser
 		$result = shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
 
 		$this->access_token = json_decode($result, true)["access_token"];
+
 		$this->auth_header 	= "-H \"Authorization: Bearer $this->access_token\"";
+
+		$this->auth_header_php = "Authorization: Bearer $this->access_token";
 	}
 
 	public function get_token() {
