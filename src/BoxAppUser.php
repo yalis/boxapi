@@ -55,6 +55,16 @@ class BoxAppUser
 		$this->getToken();
 	}
 
+	public function getAccessToken()
+	{
+		return $this->access_token;
+	}
+
+	public function getInstance()
+	{
+		return $this;
+	}
+
     /**
      * Overrides configuration settings
      *
