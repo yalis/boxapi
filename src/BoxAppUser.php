@@ -108,8 +108,15 @@ class BoxAppUser
 		$csc = $this->config['au_client_secret'];
 
 		$result = shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
-
-		$this->access_token = json_decode($result, true)["access_token"];
+		
+		try
+		{
+	            $this->access_token = json_decode($result, true)["access_token"];
+		}
+		catch(\Exception $exception)
+		{
+		    throw new \Exception("Can't get the access_token for this user configuration...");
+		}
 
 		$this->auth_header 	= "-H \"Authorization: Bearer $this->access_token\"";
 
