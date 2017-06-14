@@ -173,9 +173,25 @@ trait BoxContent {
 	}
 
 	/* Get thumbnail of a file */
-	public function getThumbnail($file_id) {
-		$url = $this->api_url . "/files/$file_id/thumbnail.png?min_height=256&min_width=256";
-		return $this->get($url);		
+	public function getThumbnail($file_id, $min_height = '256', $min_width = '256', $max_height = '256', $max_width = '256') {
+
+		$url = $this->api_url . "/files/$file_id/thumbnail.png?min_height=$min_height&min_width=$min_width&max_height=$min_width&max_width=$min_width";
+
+		//set the headers
+		$headers = $this->auth_header_php;
+
+		$curl = curl_init();
+
+		//set the options
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array($headers));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); //returns to a variable instead of straight to page
+		curl_setopt($curl, CURLOPT_HEADER, true); //returns headers as part of output
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); //I needed this for it to work
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); //I needed this for it to work
+
+		return curl_exec($curl); //because the returned page is blank, this will include headers only
+
 	}
 
 	/* Get embed link of a file */
@@ -233,7 +249,7 @@ trait BoxContent {
 		} else {
 			return json_decode($data, true);
 		}
-	} 
+	}
 
 	private function post($url, $json = false, $data = '') {
 		$data = shell_exec("curl $url $this->auth_header $data -X POST");
