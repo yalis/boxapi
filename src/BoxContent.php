@@ -190,7 +190,14 @@ trait BoxContent {
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); //I needed this for it to work
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); //I needed this for it to work
 
-		return curl_exec($curl); //because the returned page is blank, this will include headers only
+		$response = curl_exec($curl); //because the returned page is blank, this will include headers only
+
+		// Then, after your curl_exec call:
+		$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+		$header = substr($response, 0, $header_size);
+		$body = substr($response, $header_size);
+
+		return $body;
 
 	}
 
