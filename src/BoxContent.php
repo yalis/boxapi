@@ -120,8 +120,23 @@ trait BoxContent {
 
 	/* Download file */
 	public function downloadFile($file_id) {
-		$url = $this->api_url . "/files/$file_id/content";
-		return $this->get($url);
+
+		//set the headers
+		$headers = $this->auth_header_php;
+
+		$curl = curl_init();
+
+		//set the options
+		curl_setopt($curl, CURLOPT_URL, $this->api_url . "/files/$file_id/content");
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array($headers));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); //returns to a variable instead of straight to page
+		curl_setopt($curl, CURLOPT_HEADER, true); //returns headers as part of output
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); //I needed this for it to work
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); //I needed this for it to work
+
+		$headers = curl_exec($curl); //because the returned page is blank, this will include headers only
+
+		return curl_getinfo($curl, CURLINFO_REDIRECT_URL);
 	}
 
 	/* Upload a file */
@@ -158,9 +173,32 @@ trait BoxContent {
 	}
 
 	/* Get thumbnail of a file */
-	public function getThumbnail($file_id) {
-		$url = $this->api_url . "/files/$file_id/thumbnail.png?min_height=256&min_width=256";
-		return $this->get($url);		
+	public function getThumbnail($file_id, $min_height = '256', $min_width = '256', $max_height = '256', $max_width = '256') {
+
+		$url = $this->api_url . "/files/$file_id/thumbnail.png?min_height=$min_height&min_width=$min_width&max_height=$min_width&max_width=$min_width";
+
+		//set the headers
+		$headers = $this->auth_header_php;
+
+		$curl = curl_init();
+
+		//set the options
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array($headers));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); //returns to a variable instead of straight to page
+		curl_setopt($curl, CURLOPT_HEADER, true); //returns headers as part of output
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); //I needed this for it to work
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); //I needed this for it to work
+
+		$response = curl_exec($curl); //because the returned page is blank, this will include headers only
+
+		// Then, after your curl_exec call:
+		$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+		$header = substr($response, 0, $header_size);
+		$body = substr($response, $header_size);
+
+		return $body;
+
 	}
 
 	/* Get embed link of a file */
@@ -218,7 +256,7 @@ trait BoxContent {
 		} else {
 			return json_decode($data, true);
 		}
-	} 
+	}
 
 	private function post($url, $json = false, $data = '') {
 		$data = shell_exec("curl $url $this->auth_header $data -X POST");
