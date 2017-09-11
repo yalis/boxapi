@@ -31,16 +31,16 @@ class BoxAppUser
         'private_key_file'	=> 'private_key.pem',
     );
 
-	private $access_token	= '';
-	private $auth_header	= '';
+	protected $access_token	= '';
+	protected $auth_header	= '';
 
 	// These urls below used for Box Content API
-	private $token_url	 	= 'https://www.box.com/api/oauth2/token';
-	private $api_url 		= 'https://api.box.com/2.0';
-	private $upload_url 	= 'https://upload.box.com/api/2.0';
+	protected $token_url	 	= 'https://www.box.com/api/oauth2/token';
+	protected $api_url 		= 'https://api.box.com/2.0';
+	protected $upload_url 	= 'https://upload.box.com/api/2.0';
 
 	// This url below used for get App User access_token in JWT
-	private $audience_url 	= 'https://api.box.com/oauth2/token';
+	protected $audience_url 	= 'https://api.box.com/oauth2/token';
 
 	public function __construct(array $config = array())
 	{
@@ -82,7 +82,7 @@ class BoxAppUser
         return $this;
     }
 
-	private function getToken($id = '', $type = '') {
+	protected function getToken($id = '', $type = '') {
 
 		if (empty($id)) {
 			$id = $this->config['app_user_id'];
@@ -154,7 +154,7 @@ class BoxAppUser
 		}
 	}
 
-	private function checkUser($name) {
+	protected function checkUser($name) {
 
 		// Get all enterprise users with name like in config.app_user_name.
 		$users = $this->getEnterpriseUsers()['entries'];

@@ -17,18 +17,18 @@ class BoxStandardUser {
         'redirect_uri'		=> '',
     );
 
-	private $refresh_token	= '';
-	private $access_token	= '';
-	private $auth_header	= '';
+	protected $refresh_token	= '';
+	protected $access_token	= '';
+	protected $auth_header	= '';
 
 	// These urls below used for Box Content API
-	private $token_url	 	= 'https://api.box.com/oauth2/token';
-	private $api_url 		= 'https://api.box.com/2.0';
-	private $upload_url 	= 'https://upload.box.com/api/2.0';
-	private $authorize_url 	= 'https://app.box.com/api/oauth2/authorize';
+	protected $token_url	 	= 'https://api.box.com/oauth2/token';
+	protected $api_url 		= 'https://api.box.com/2.0';
+	protected $upload_url 	= 'https://upload.box.com/api/2.0';
+	protected $authorize_url 	= 'https://app.box.com/api/oauth2/authorize';
 
 	// This url below used for get App User access_token in JWT
-	private $audience_url 	= 'https://api.box.com/oauth2/token';
+	protected $audience_url 	= 'https://api.box.com/oauth2/token';
 
 	public function __construct(array $config = array())
 	{
@@ -48,19 +48,19 @@ class BoxStandardUser {
 		$this->auth_header 	= "-H \"Authorization: Bearer $this->access_token\"";
 
 	}
-	
+
 	/**
     * Overrides configuration settings
     *
     * @param array $config
     */
-	private function configure(array $config = array())
+	protected function configure(array $config = array())
     {
         $this->config = array_replace($this->config, $config);
         return $this;
     }
 
-	private function getCode() {
+	protected function getCode() {
 
 		$url = $this->authorize_url.'?'.http_build_query(array(
 			'response_type'	=> 'code',
@@ -78,15 +78,15 @@ class BoxStandardUser {
 		$url = $this->token_url;
 		if(!empty($this->refresh_token)){
 			$querystring = http_build_query(array(
-				'grant_type' 	=> 'refresh_token', 
-				'refresh_token' => $this->refresh_token, 
-				'client_id' 	=> $this->config['su_client_id'], 
+				'grant_type' 	=> 'refresh_token',
+				'refresh_token' => $this->refresh_token,
+				'client_id' 	=> $this->config['su_client_id'],
 				'client_secret' => $this->config['su_client_secret']));
 		} else {
 			$querystring = http_build_query(array(
-				'grant_type' 	=> 'authorization_code', 
-				'code' 			=> $code, 
-				'client_id' 	=> $this->config['su_client_id'], 
+				'grant_type' 	=> 'authorization_code',
+				'code' 			=> $code,
+				'client_id' 	=> $this->config['su_client_id'],
 				'client_secret' => $this->config['su_client_secret']));
 		}
 
@@ -131,7 +131,7 @@ class BoxStandardUser {
 			return true;
 		}
 	}
-	
+
 	/* Loads the token */
 	public function loadToken() {
 		$array = $this->readToken('file');
@@ -158,7 +158,7 @@ class BoxStandardUser {
 		}
 	}
 
-	private function expired($expires_in, $timestamp) {
+	protected function expired($expires_in, $timestamp) {
 		$ctimestamp = time();
 		if(($ctimestamp - $timestamp) >= $expires_in){
 			return true;
