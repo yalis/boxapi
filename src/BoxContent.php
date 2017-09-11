@@ -247,6 +247,15 @@ trait BoxContent {
 		return $this->get($url, $json);
 	}
 
+    /* Search for files/folders */
+    public function search($query, $type = '', $scope = 'user_content', $limit = 100, $json = false)
+    {
+
+        $url = $this->api_url . "/search?query=$query&type=$type&scope=$scope&limit=$limit";
+        return $this->get($url, $json);
+    }
+
+
 	// ================================= Helper Methods ==================================
 
 	protected function get($url, $json = false, $data = '') {
