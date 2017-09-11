@@ -20,10 +20,10 @@ class BoxAUContentTest extends PHPUnit_Framework_TestCase
 	        'enterprise_id'		=> '',
 	        'app_user_name'		=> '',
 	        'app_user_id'		=> '',
-	        'kid_value'			=> '',
+	        'public_key_id'		=> '',
 	        'passphrase'		=> '',
 	        'expiration'		=> 60,
-	        'private_key_file'	=> 'private_key.pem',    		
+	        'private_key_file'	=> 'private_key.pem',
     	);
     	$this->client = new BoxAppUser($config);
     }
