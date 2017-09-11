@@ -25,10 +25,10 @@ class BoxAPIServiceProviderLumen extends ServiceProvider
             'enterprise_id'     => $_ENV['BOX_ENTERPRISE_ID'],
             'app_user_name'     => $_ENV['BOX_APP_USER_NAME'],
             'app_user_id'       => $_ENV['BOX_APP_USER_ID'],
-            'kid_value'         => $_ENV['BOX_KID_VALUE'],
+            'public_key_id'     => $_ENV['BOX_PUBLIC_KEY_ID'],
             'passphrase'        => $_ENV['BOX_PASSPHRASE'],
             'expiration'        => $_ENV['BOX_EXPIRATION'],
-            'private_key_file'  => base_path() . "/" . $_ENV['BOX_PRIVATE_KEY_FILE']        
+            'private_key_file'  => base_path() . "/" . $_ENV['BOX_PRIVATE_KEY_FILE']
         );
 
         // create image

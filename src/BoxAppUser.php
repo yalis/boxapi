@@ -7,7 +7,7 @@ use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 
-class BoxAppUser 
+class BoxAppUser
 {
 
 	use BoxContent;
@@ -25,7 +25,7 @@ class BoxAppUser
         'enterprise_id'		=> '',
         'app_user_name'		=> '',
         'app_user_id'		=> '',
-        'kid_value'			=> '',
+        'public_key_id'		=> '',
         'passphrase'		=> '',
         'expiration'		=> 60,
         'private_key_file'	=> 'private_key.pem',
@@ -46,7 +46,7 @@ class BoxAppUser
 	{
 		$this->configure($config);
 
-		// get enterprise admin token to check if app_user_name exist 
+		// get enterprise admin token to check if app_user_name exist
 		// if exist, get the id and put it on app_user_id
 		$this->getToken($this->config['enterprise_id'], "enterprise");
 		$this->checkUser($this->config['app_user_name']);
@@ -72,6 +72,12 @@ class BoxAppUser
      */
 	public function configure(array $config = array())
     {
+        // Backwards compatible for old public_key_id config name
+        if (empty($config['public_key_id'])) {
+            if (!empty($config['kid_value'])) {
+                $config['public_key_id'] = $config['kid_value'];
+            }
+        }
         $this->config = array_replace($this->config, $config);
         return $this;
     }
@@ -79,7 +85,7 @@ class BoxAppUser
 	private function getToken($id = '', $type = '') {
 
 		if (empty($id)) {
-			$id = $this->config['app_user_id']; 
+			$id = $this->config['app_user_id'];
 			$type = "user";
 		}
 
@@ -89,9 +95,9 @@ class BoxAppUser
 		$privateKeyString = new Key(
 			"file://" . $this->config['private_key_file'], $this->config['passphrase']
 		);
-	
+
 		$assertion = (new Builder())
-			->setHeader('kid', $this->config['kid_value'])
+			->setHeader('kid', $this->config['public_key_id'])
 			->setIssuer($this->config['au_client_id'])
 			->setSubject($id)
 			->set('box_sub_type', $type)
@@ -99,16 +105,16 @@ class BoxAppUser
 			->setId(uniqid('ABC'))
 			->setIssuedAt(time())
 			->setExpiration(time() + $this->config['expiration'])
-		    ->sign($signer,  $privateKeyString) 
-		    ->getToken(); 
+		    ->sign($signer,  $privateKeyString)
+		    ->getToken();
 
 		$attributes = "-d 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer";
-		
+
 		$cid = $this->config['au_client_id'];
 		$csc = $this->config['au_client_secret'];
 
 		$result = shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
-		
+
 		try
 		{
 	            $this->access_token = json_decode($result, true)["access_token"];
@@ -150,7 +156,7 @@ class BoxAppUser
 
 	private function checkUser($name) {
 
-		// Get all enterprise users with name like in config.app_user_name. 
+		// Get all enterprise users with name like in config.app_user_name.
 		$users = $this->getEnterpriseUsers()['entries'];
 		$response = $this->multiArraySearch($users, ['name' => $name]);
 
@@ -161,7 +167,7 @@ class BoxAppUser
 		}  else {
 			// If exist, get the id
 			$this->config['app_user_id'] = $users[$response[0]]["id"];
-		}	
+		}
 
 		return $this->config['app_user_id'];
 	}

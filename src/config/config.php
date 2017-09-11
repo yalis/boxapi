@@ -4,10 +4,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Box Developer IDs 
+    | Box Developer IDs
     |--------------------------------------------------------------------------
     |
-    | Set these value based on this documentation 
+    | Set these value based on this documentation
     | https://box-content.readme.io/docs/box-platform
     |
     */
@@ -20,7 +20,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Get Enterprise IDs 
+    | Get Enterprise IDs
     |--------------------------------------------------------------------------
     |
     | Login into box.com and go to admin console menu on top left.
@@ -33,11 +33,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Set Username or User Id 
+    | Set Username or User Id
     |--------------------------------------------------------------------------
     |
     | Set user name to use as App User in Enterprise. Usually need single user.
-    | Set user id if you know exactly the user id of Enterprise user 
+    | Set user id if you know exactly the user id of Enterprise user
     | to use this API.
     |
     */
@@ -53,7 +53,7 @@ return [
     | Set expiration time in second after request token. Max 60 seconds.
     |
     */
-   
+
     'expiration'    	=> 60,
 
     /*
@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'kid_value'         => '',
+    'public_key_id'     => '',
     'private_key_file'  => 'private_key.pem',
     'passphrase'        => '1234',
 
