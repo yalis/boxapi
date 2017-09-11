@@ -84,8 +84,8 @@ trait BoxContent {
 	/* Restore a folder */
 	public function restoreFolder($folder_id, $newname = '', $json = false) {
 		$url = $this->api_url . "/folders/$folder_id";
-		if (empty($newname)) { 
-			$data = "-d '{\"name\": \"$newname\"}'"; 
+		if (empty($newname)) {
+			$data = "-d '{\"name\": \"$newname\"}'";
 		}
 		return $this->post($url, $json, $data);
 	}
@@ -95,9 +95,9 @@ trait BoxContent {
 	|
 	| ================================= File API Methods ==================================
 	| Check Box documentation here https://box-content.readme.io/reference#files
-	|  
+	|
 	*/
-	
+
 	/* Get the details of the mentioned file */
 	public function getFileInfo($file_id, $json = false) {
 		$url = $this->api_url . "/files/$file_id";
@@ -204,7 +204,7 @@ trait BoxContent {
 	/* Get embed link of a file */
 	public function getEmbedLink($file_id, $json = false) {
 		$url = $this->api_url . "/files/$file_id?fields=expiring_embed_link";
-		return $this->get($url, $json);		
+		return $this->get($url, $json);
 	}
 
 	/* Share a file */
@@ -229,8 +229,8 @@ trait BoxContent {
 	/* Restore a file */
 	public function restoreItem($file_id, $newname = '', $json = false) {
 		$url = $this->api_url . "/files/$file_id";
-		if (empty($newname)) { 
-			$data = "-d '{\"name\": \"$newname\"}'"; 
+		if (empty($newname)) {
+			$data = "-d '{\"name\": \"$newname\"}'";
 		}
 		return $this->post($url, $json, $data);
 	}
@@ -249,7 +249,7 @@ trait BoxContent {
 
 	// ================================= Helper Methods ==================================
 
-	private function get($url, $json = false, $data = '') {
+	protected function get($url, $json = false, $data = '') {
 		$data = shell_exec("curl $url $this->auth_header $data");
 		if ($json) {
 			return $data;
@@ -258,27 +258,27 @@ trait BoxContent {
 		}
 	}
 
-	private function post($url, $json = false, $data = '') {
+	protected function post($url, $json = false, $data = '') {
 		$data = shell_exec("curl $url $this->auth_header $data -X POST");
 		if ($json) {
 			return $data;
 		} else {
 			return json_decode($data, true);
 		}
-	} 
+	}
 
-	private function put($url, $json = false, $data = '') {
+	protected function put($url, $json = false, $data = '') {
 		$data = shell_exec("curl $url $this->auth_header $data -X PUT");
 		if ($json) {
 			return $data;
 		} else {
 			return json_decode($data, true);
 		}
-	} 
+	}
 
-	private function delete($url) {
+	protected function delete($url) {
 		$data = shell_exec("curl $url $this->auth_header -X DELETE");
 		return $data;
-	} 
+	}
 
 }

@@ -7,7 +7,7 @@ use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 
-class BoxAppUser 
+class BoxAppUser
 {
 
 	use BoxContent;
@@ -31,22 +31,22 @@ class BoxAppUser
         'private_key_file'	=> 'private_key.pem',
     );
 
-	private $access_token	= '';
-	private $auth_header	= '';
+	protected $access_token	= '';
+	protected $auth_header	= '';
 
 	// These urls below used for Box Content API
-	private $token_url	 	= 'https://www.box.com/api/oauth2/token';
-	private $api_url 		= 'https://api.box.com/2.0';
-	private $upload_url 	= 'https://upload.box.com/api/2.0';
+	protected $token_url	 	= 'https://www.box.com/api/oauth2/token';
+	protected $api_url 		= 'https://api.box.com/2.0';
+	protected $upload_url 	= 'https://upload.box.com/api/2.0';
 
 	// This url below used for get App User access_token in JWT
-	private $audience_url 	= 'https://api.box.com/oauth2/token';
+	protected $audience_url 	= 'https://api.box.com/oauth2/token';
 
 	public function __construct(array $config = array())
 	{
 		$this->configure($config);
 
-		// get enterprise admin token to check if app_user_name exist 
+		// get enterprise admin token to check if app_user_name exist
 		// if exist, get the id and put it on app_user_id
 		$this->getToken($this->config['enterprise_id'], "enterprise");
 		$this->checkUser($this->config['app_user_name']);
@@ -76,10 +76,10 @@ class BoxAppUser
         return $this;
     }
 
-	private function getToken($id = '', $type = '') {
+	protected function getToken($id = '', $type = '') {
 
 		if (empty($id)) {
-			$id = $this->config['app_user_id']; 
+			$id = $this->config['app_user_id'];
 			$type = "user";
 		}
 
@@ -89,7 +89,7 @@ class BoxAppUser
 		$privateKeyString = new Key(
 			"file://" . $this->config['private_key_file'], $this->config['passphrase']
 		);
-	
+
 		$assertion = (new Builder())
 			->setHeader('kid', $this->config['kid_value'])
 			->setIssuer($this->config['au_client_id'])
@@ -99,16 +99,16 @@ class BoxAppUser
 			->setId(uniqid('ABC'))
 			->setIssuedAt(time())
 			->setExpiration(time() + $this->config['expiration'])
-		    ->sign($signer,  $privateKeyString) 
-		    ->getToken(); 
+		    ->sign($signer,  $privateKeyString)
+		    ->getToken();
 
 		$attributes = "-d 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer";
-		
+
 		$cid = $this->config['au_client_id'];
 		$csc = $this->config['au_client_secret'];
 
 		$result = shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
-		
+
 		try
 		{
 	            $this->access_token = json_decode($result, true)["access_token"];
@@ -148,9 +148,9 @@ class BoxAppUser
 		}
 	}
 
-	private function checkUser($name) {
+	protected function checkUser($name) {
 
-		// Get all enterprise users with name like in config.app_user_name. 
+		// Get all enterprise users with name like in config.app_user_name.
 		$users = $this->getEnterpriseUsers()['entries'];
 		$response = $this->multiArraySearch($users, ['name' => $name]);
 
@@ -161,7 +161,7 @@ class BoxAppUser
 		}  else {
 			// If exist, get the id
 			$this->config['app_user_id'] = $users[$response[0]]["id"];
-		}	
+		}
 
 		return $this->config['app_user_id'];
 	}
