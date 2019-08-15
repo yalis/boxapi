@@ -160,8 +160,8 @@ trait BoxContent {
 
 	/* Update a file - new upload to update content of file */
 	public function updateFile($filename, $file_id, $json = false) {
-		$url = $this->upload_url . '/files/$file_id/content';
-		$attributes = $attributes . " -F file=@$filename";
+		$url = $this->upload_url . '/files/' . $file_id . '/content';
+		$attributes = "-F file=@$filename";
 		return $this->post($url, $json, $attributes);
 	}
 
