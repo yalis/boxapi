@@ -116,7 +116,7 @@ class BoxAppUser
 
 		$result = Cache::remember('access_token', 1800, function (){
 				return shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
-			}
+			});
 		try
 		{
 	            $this->access_token = json_decode($result, true)["access_token"];
