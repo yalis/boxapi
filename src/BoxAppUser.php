@@ -6,7 +6,6 @@ use Config;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Illuminate\Support\Facades\Cache;
 
 class BoxAppUser
 {
@@ -114,9 +113,8 @@ class BoxAppUser
 		$cid = $this->config['au_client_id'];
 		$csc = $this->config['au_client_secret'];
 
-		$result = Cache::remember('access_token', 1800, function (){
-				return shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
-			});
+		$result = shell_exec("curl $this->token_url $attributes&client_id=$cid&client_secret=$csc&assertion=$assertion' -X POST");
+		
 		try
 		{
 	            $this->access_token = json_decode($result, true)["access_token"];
