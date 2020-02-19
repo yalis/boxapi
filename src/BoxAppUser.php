@@ -35,7 +35,7 @@ class BoxAppUser
 	protected $auth_header	= '';
 
 	// These urls below used for Box Content API
-	protected $token_url	 	= 'https://www.box.com/api/oauth2/token';
+	protected $token_url	 	= 'https://api.box.com/oauth2/token';
 	protected $api_url 		= 'https://api.box.com/2.0';
 	protected $upload_url 	= 'https://upload.box.com/api/2.0';
 
